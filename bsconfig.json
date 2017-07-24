@@ -9,7 +9,9 @@
   },
   "bs-dependencies": [
     "reason-react",
-    "bs-director"
+    "bs-director",
+    "bs-fetch",
+    "bs-json"
   ],
   "bs-dev-dependencies": [
     "bs-jest",
