@@ -59,7 +59,7 @@
 /******/ 	
 /******/ 	
 /******/ 	var hotApplyOnUpdate = true;
-/******/ 	var hotCurrentHash = "d3c3a63b449bbe8294a6"; // eslint-disable-line no-unused-vars
+/******/ 	var hotCurrentHash = "fe2956eea850eac8bc02"; // eslint-disable-line no-unused-vars
 /******/ 	var hotCurrentModuleData = {};
 /******/ 	var hotCurrentChildModule; // eslint-disable-line no-unused-vars
 /******/ 	var hotCurrentParents = []; // eslint-disable-line no-unused-vars
@@ -18060,6 +18060,8 @@ exports.make      = make;
 
 var Json_decode = __webpack_require__(139);
 
+var github_repos_url = "https://api.github.com/search/repositories?q=topic%3Areasonml&type=Repositories";
+
 function parse_repository_json(json) {
   return /* record */[
           /* id */Json_decode.field("full_name", Json_decode.string, json),
@@ -18069,7 +18071,24 @@ function parse_repository_json(json) {
         ];
 }
 
-exports.parse_repository_json = parse_repository_json;
+function parse_repository_response_json(json) {
+  return Json_decode.field("items", (function (param) {
+                return Json_decode.array(parse_repository_json, param);
+              }), json);
+}
+
+function fetch_repositories() {
+  return fetch(github_repos_url).then((function (prim) {
+                  return prim.text();
+                })).then((function (json_text) {
+                return Promise.resolve(parse_repository_response_json(JSON.parse(json_text)));
+              }));
+}
+
+exports.github_repos_url               = github_repos_url;
+exports.parse_repository_json          = parse_repository_json;
+exports.parse_repository_response_json = parse_repository_response_json;
+exports.fetch_repositories             = fetch_repositories;
 /* No side effect */
 
 
