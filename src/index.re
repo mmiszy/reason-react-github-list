@@ -1,1 +1,1 @@
-ReactDOMRe.renderToElementWithId <App title="Welcome to Create Reason React App!" /> "root";
+ReactDOMRe.renderToElementWithId <App name="Elo 320!" /> "root";
