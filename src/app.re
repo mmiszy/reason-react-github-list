@@ -1,22 +1,24 @@
-let dummy_repo: RepositoryData.github_repository =
-  RepositoryData.parse_repository_json (
-    Js.Json.parseExn {js|
-      {
-        "id": "1",
-        "full_name": "test name",
-        "stargazers_count": 129,
-        "html_url": "https://github.com/mmiszy/reason-react-github-list"
-      }
-    |js}
-  );
-
 type state = {repositories: option (array RepositoryData.github_repository)};
+
+let handleReposLoaded repos _self => ReasonReact.Update {repositories: Some repos};
 
 let component = ReasonReact.statefulComponent "App";
 
 let make ::name _children => {
   ...component,
-  initialState: fun () => ({repositories: Some [|dummy_repo|]}: state),
+  initialState: fun () => ({repositories: None}: state),
+  didMount: fun self => {
+    Js.Promise.(
+      RepositoryData.fetch_repositories () |>
+      then_ (
+        fun repos => {
+          (self.update handleReposLoaded) repos;
+          resolve ()
+        }
+      ) |> ignore
+    );
+    ReasonReact.NoUpdate
+  },
   render: fun {state} => {
     let repositoryItem =
       switch state.repositories {

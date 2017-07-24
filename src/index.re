@@ -1,1 +1,1 @@
-ReactDOMRe.renderToElementWithId <App name="Elo 320!" /> "root";
+ReactDOMRe.renderToElementWithId <App name="Reason React GitHub List" /> "root";
